@@ -77,7 +77,7 @@ const Home = () => {
 
     return (
         <main className="max-w-container-lg mx-auto px-6 py-20">
-            <nav className='flex justify-between'>
+            <nav className='flex flex-col gap-4 lg:flex-row justify-between'>
                 <h1 className="font-bold text-black text-4xl ">Image Gallery</h1>
 
                 <form
@@ -93,9 +93,9 @@ const Home = () => {
                 </form>
             </nav>
 
-            <div className="max-w-container-lg mx-auto px-6 xl:px-0 py-20">
+            <div className="max-w-container-lg mx-auto py-20">
 
-                <div className='grid grid-cols-3 gap-14'>
+                <div className='grid grid-cols-2 lg:grid-cols-3 gap-8 md:gap-14'>
                     <DndContext
                         sensors={sensors}
                         collisionDetection={rectIntersection} onDragEnd={onDragEnd}>
