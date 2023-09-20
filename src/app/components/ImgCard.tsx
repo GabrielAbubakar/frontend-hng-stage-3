@@ -24,7 +24,11 @@ const ImgCard = ({ user }: any) => {
             {...attributes}
             {...listeners}
             className='flex flex-col gap-4'>
-            <Image className='w-full object-cover' src={user.img} alt='stuff' />
+            <Image
+                placeholder='blur'
+                className='w-full object-cover'
+                src={user.img}
+                alt='stuff' />
             <ul className='flex flex-wrap gap-3'>
                 {
                     user.tags.map((item: any, i: any) => (
