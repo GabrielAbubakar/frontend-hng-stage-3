@@ -23,10 +23,15 @@ const ImgCard = ({ user }: any) => {
             ref={setNodeRef}
             {...attributes}
             {...listeners}
-            key={user.id}
             className='user'>
-            {/* <h2>{user.id}</h2> */}
-            <Image className='w-full h-full' src={user.img} alt='stuff' key={user.id} />
+            <Image className='w-full object-cover' src={user.img} alt='stuff' />
+            <ul className='flex gap-3 mt-5'>
+                {
+                    user.tags.map((item: any, i: any) => (
+                        <li className=' bg-blue-100 px-3 py-1 rounded-2xl' key={i}>#{item}</li>
+                    ))
+                }
+            </ul>
         </div>
     )
 }

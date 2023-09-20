@@ -15,46 +15,53 @@ export const imgData = [
     {
         id: 1,
         img: Alena,
-        tags: ['nature', 'photograhpy', 'life']
+        tags: ['nature', 'people']
     },
     {
         id: 2,
         img: Ashford,
-        tags: ['nature', 'photograhpy', 'life']
+        tags: ['nature', 'people']
     },
     {
         id: 3,
         img: Kateryna,
-        tags: ['nature', 'photograhpy', 'life']
+        tags: ['animals', 'photography']
     },
     {
         id: 4,
         img: Brian,
-        tags: ['nature', 'photograhpy', 'life']
+        tags: ['people', 'gang']
     },
     {
         id: 5,
         img: Vusal,
-        tags: ['nature', 'photograhpy', 'life']
+        tags: ['people']
     },
     {
         id: 6,
         img: Ali,
-        tags: ['nature', 'photograhpy', 'life']
+        tags: ['people', 'gang']
     },
     {
         id: 7,
         img: Neom,
-        tags: ['nature', 'photograhpy', 'life']
+        tags: ['nature', 'people', 'animals']
     },
     {
         id: 8,
         img: Michael,
-        tags: ['nature', 'photograhpy', 'life']
+        tags: ['nature', 'animals']
     },
     {
         id: 9,
         img: Hiki,
-        tags: ['nature', 'photograhpy', 'life']
+        tags: ['nature', 'people']
     },
 ]
+
+
+export interface ItemType {
+    id: number,
+    img: any,
+    tags: string[]
+}
