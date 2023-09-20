@@ -1,12 +1,16 @@
 "use client"
 import React, { useState } from 'react'
 import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
-const Home = () => {
+
+const SignIn = () => {
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+
+    const router = useRouter()
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
@@ -17,24 +21,20 @@ const Home = () => {
         }
 
         try {
-            const res = await fetch('api/signIn', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email,
-                    password
-                })
+            const res = await signIn('credentials', {
+                email,
+                password,
+                redirect: false
             })
 
-            if (res.ok) {
-                const form = e.target
-                form.reset()
-            } else {
-                console.log('User registration failed');
+            if (res?.error) {
+                setError("Invalid credentials")
+                return
             }
 
+            router.replace('gallery')
+            const form = e.target
+            form.reset()
         } catch (error) {
             console.log(error);
         }
@@ -73,4 +73,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default SignIn
