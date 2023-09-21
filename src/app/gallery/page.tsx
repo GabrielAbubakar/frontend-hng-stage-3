@@ -14,6 +14,7 @@ import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arra
 import { useState, useEffect } from 'react'
 import { imgData } from '../components/data';
 import ImgCard from '../components/ImgCard';
+import { signOut } from 'next-auth/react'
 
 const Gallery = () => {
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
@@ -80,6 +81,7 @@ const Gallery = () => {
             <nav className='flex flex-col gap-4 lg:flex-row justify-between'>
                 <h1 className="font-bold text-black text-4xl ">Image Gallery</h1>
 
+                <button onClick={() => signOut()}>Log out</button>
                 <form
                     onSubmit={(e) => handleSearch(e)}
                 >
