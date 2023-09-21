@@ -21,6 +21,7 @@ export default function Home() {
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
     const [store, setStore] = useState(imgData)
     const [filteredStore, setFilteredStore] = useState(imgData)
+    const [loading, setLoading] = useState(true)
     const [search, setSearch] = useState('')
 
     const session = useSession({
@@ -56,6 +57,12 @@ export default function Home() {
 
         setSearch('')
     }
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false);
+        }, 3000)
+    }, []);
 
     if (filteredStore.length == 0) {
         return (
@@ -110,19 +117,25 @@ export default function Home() {
 
             <div className="max-w-container-lg mx-auto py-20">
 
-                <div className='grid grid-cols-2 lg:grid-cols-3 gap-8 md:gap-14'>
-                    <DndContext
-                        sensors={sensors}
-                        collisionDetection={rectIntersection} onDragEnd={onDragEnd}>
-                        <SortableContext items={filteredStore} strategy={rectSortingStrategy}>
-                            {
-                                filteredStore.map((item, i) => (
-                                    <ImgCard key={item.id} user={item} />
-                                ))
-                            }
-                        </SortableContext>
-                    </DndContext>
-                </div>
+                {
+                    loading == false ? (
+                        <div className='grid grid-cols-2 lg:grid-cols-3 gap-8 md:gap-14'>
+                            <DndContext
+                                sensors={sensors}
+                                collisionDetection={rectIntersection} onDragEnd={onDragEnd}>
+                                <SortableContext items={filteredStore} strategy={rectSortingStrategy}>
+                                    {
+                                        filteredStore.map((item, i) => (
+                                            <ImgCard key={item.id} user={item} />
+                                        ))
+                                    }
+                                </SortableContext>
+                            </DndContext>
+                        </div>
+                    ) : (
+                        <h3>Loading Images...</h3>
+                    )
+                }
             </div>
         </main >
     )

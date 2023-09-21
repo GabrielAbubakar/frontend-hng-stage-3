@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
@@ -9,6 +9,7 @@ const SignIn = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
 
     const router = useRouter()
 
@@ -23,30 +24,14 @@ const SignIn = () => {
             return
         }
 
-        // try {
-        //     const res = await signIn('credentials', {
-        //         email,
-        //         password,
-        //         redirect: false
-        //     })
-
-        //     if (res?.error) {
-        //         setError("Invalid credentials, Please use the username and password provided above")
-        //         setTimeout(() => {
-        //             setError('')
-        //         }, 3000)
-        //         const form = e.target
-        //         form.reset()
-        //         return
-        //     }
-
-        //     router.replace('gallery')
-        //     const form = e.target
-        //     form.reset()
-        // } catch (error) {
-        //     console.log(error);
-        // }
+        signIn('credentials', { email, password, redirect: true, callbackUrl: '/gallery' })
+        setLoading(true)
     }
+
+    useEffect(() => {
+        setEmail('')
+        setPassword('')
+    }, [])
 
     return (
         <main className='w-full h-screen flex justify-center items-center'>
@@ -70,10 +55,23 @@ const SignIn = () => {
                     type="password"
                     placeholder='Password' />
 
-                <input
-                    onClick={() => signIn('credentials', { email, password, redirect: true, callbackUrl: '/gallery' })}
-                    disabled={!email || !password}
-                    className='cursor-pointer bg-green-500 p-2' type="submit" value="Sign In" />
+                {
+                    loading ? (
+                        <input
+                            // onClick={() => signIn('credentials', { email, password, redirect: true, callbackUrl: '/gallery' })}
+                            // disabled={!email || !password}
+                            className='cursor-pointer bg-green-500 p-2'
+                            type="submit"
+                            value="Loading..." />
+                    ) : (
+                        <input
+                            // onClick={() => signIn('credentials', { email, password, redirect: true, callbackUrl: '/gallery' })}
+                            // disabled={!email || !password}
+                            className='cursor-pointer bg-green-500 p-2'
+                            type="submit"
+                            value="Sign In" />
+                    )
+                }
 
                 {
                     error && (
