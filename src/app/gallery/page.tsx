@@ -88,11 +88,11 @@ export default function Home() {
         <main className="max-w-container-lg mx-auto px-6 py-20">
             <nav className='flex flex-col gap-4 lg:flex-row justify-between'>
                 <h1 className="font-bold text-black text-4xl ">Image Gallery</h1>
-
+                {/* 
                 <div className="p-8">
                     <div>{session?.data?.user?.email}</div>
                     <button onClick={() => signOut()}>Logout</button>
-                </div>
+                </div> */}
 
 
                 <form
