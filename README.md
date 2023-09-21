@@ -1,4 +1,5 @@
-# This is a simple image gallery application done in completion of task 3 of the HNG Frontend Internship. It allows a user to log in view the available images on the site in its default arrangement and then drag and drop in order to rearrange the order of the images on the website. The drag and drop functionalities would be smoothly animated and happen in front of the client.
+# Frontend HNG Task Three
+This is a simple image gallery application done in completion of task 3 of the HNG Frontend Internship. It allows a user to log in view the available images on the site in its default arrangement and then drag and drop in order to rearrange the order of the images on the website. The drag and drop functionalities would be smoothly animated and happen in front of the user.
 
 ## How to use the application
 1. Click on the provided live link to go to the sign in page. [Live Deploy](https://frontend-hng-stage-3.vercel.app/)
