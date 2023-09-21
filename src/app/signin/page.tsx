@@ -71,7 +71,7 @@ const SignIn = () => {
                     placeholder='Password' />
 
                 <input
-                    onClick={() => signIn('credentials', { email, password, redirect: true, callbackUrl: '/gallery' })}
+                    onClick={() => signIn('credentials', { email, password, redirect: true, callbackUrl: '/' })}
                     disabled={!email || !password}
                     className='cursor-pointer bg-green-500 p-2' type="submit" value="Sign In" />
 
