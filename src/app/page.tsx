@@ -16,7 +16,10 @@ const SignIn = () => {
         e.preventDefault()
 
         if (!email || !password) {
-            setError('All fields are neccessary')
+            setError('All input fields are neccessary')
+            setTimeout(() => {
+                setError('')
+            }, 3000)
             return
         }
 
@@ -28,7 +31,10 @@ const SignIn = () => {
             })
 
             if (res?.error) {
-                setError("Invalid credentials")
+                setError("Invalid credentials, Please use the username and password provided above")
+                setTimeout(() => {
+                    setError('')
+                }, 3000)
                 const form = e.target
                 form.reset()
                 return
