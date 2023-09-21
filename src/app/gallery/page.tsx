@@ -1,6 +1,4 @@
 'use client'
-import { signOut, useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
 import {
     DndContext,
     DragOverlay,
@@ -14,21 +12,14 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useState, useEffect } from 'react'
-import { imgData } from './components/data';
-import ImgCard from './components/ImgCard';
+import { imgData } from '../components/data';
+import ImgCard from '../components/ImgCard';
 
-export default function Home() {
+const Home = () => {
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
     const [store, setStore] = useState(imgData)
     const [filteredStore, setFilteredStore] = useState(imgData)
     const [search, setSearch] = useState('')
-
-    const session = useSession({
-        required: true,
-        onUnauthenticated() {
-            redirect('/signin');
-        },
-    });
 
     const onDragEnd = (event: any) => {
         const { active, over } = event
@@ -89,12 +80,6 @@ export default function Home() {
             <nav className='flex flex-col gap-4 lg:flex-row justify-between'>
                 <h1 className="font-bold text-black text-4xl ">Image Gallery</h1>
 
-                <div className="p-8">
-                    <div className='text-white'>{session?.data?.user?.email}</div>
-                    <button className='text-white' onClick={() => signOut()}>Logout</button>
-                </div>
-
-
                 <form
                     onSubmit={(e) => handleSearch(e)}
                 >
@@ -128,4 +113,4 @@ export default function Home() {
     )
 }
 
-Home.requireAuth = true
+export default Home
