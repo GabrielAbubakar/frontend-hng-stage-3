@@ -1,4 +1,6 @@
 'use client'
+import { signOut, useSession } from 'next-auth/react';
+import { redirect } from 'next/navigation';
 import {
     DndContext,
     DragOverlay,
@@ -15,11 +17,18 @@ import { useState, useEffect } from 'react'
 import { imgData } from '../components/data';
 import ImgCard from '../components/ImgCard';
 
-const Home = () => {
+export default function Home() {
     const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
     const [store, setStore] = useState(imgData)
     const [filteredStore, setFilteredStore] = useState(imgData)
     const [search, setSearch] = useState('')
+
+    const session = useSession({
+        required: true,
+        onUnauthenticated() {
+            redirect('/');
+        },
+    });
 
     const onDragEnd = (event: any) => {
         const { active, over } = event
@@ -80,6 +89,12 @@ const Home = () => {
             <nav className='flex flex-col gap-4 lg:flex-row justify-between'>
                 <h1 className="font-bold text-black text-4xl ">Image Gallery</h1>
 
+                <div className="p-8">
+                    <div>{session?.data?.user?.email}</div>
+                    <button onClick={() => signOut()}>Logout</button>
+                </div>
+
+
                 <form
                     onSubmit={(e) => handleSearch(e)}
                 >
@@ -113,4 +128,4 @@ const Home = () => {
     )
 }
 
-export default Home
+Home.requireAuth = true

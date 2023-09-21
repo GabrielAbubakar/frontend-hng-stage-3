@@ -1,131 +1,88 @@
-'use client'
-import { signOut, useSession } from 'next-auth/react';
-import { redirect } from 'next/navigation';
-import {
-    DndContext,
-    DragOverlay,
-    rectIntersection,
-    // closestCenter,
-    MouseSensor,
-    TouchSensor,
-    // DragOverlay,
-    useSensor,
-    useSensors,
-} from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, rectSortingStrategy, arrayMove } from '@dnd-kit/sortable';
-import { useState, useEffect } from 'react'
-import { imgData } from './components/data';
-import ImgCard from './components/ImgCard';
+"use client"
+import React, { useState } from 'react'
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
-export default function Home() {
-    const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
-    const [store, setStore] = useState(imgData)
-    const [filteredStore, setFilteredStore] = useState(imgData)
-    const [search, setSearch] = useState('')
 
-    const session = useSession({
-        required: true,
-        onUnauthenticated() {
-            redirect('/signin');
-        },
-    });
+const SignIn = () => {
 
-    const onDragEnd = (event: any) => {
-        const { active, over } = event
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
 
-        if (active.id !== over.id) {
-            setFilteredStore((items) => {
-                const oldIndex = filteredStore.findIndex(user => user.id === active.id)
-                const newIndex = filteredStore.findIndex(user => user.id === over.id)
+    const router = useRouter()
 
-                return arrayMove(items, oldIndex, newIndex)
-            })
-        }
-    }
-
-    const handleSearch = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault()
 
-        if (search == '' || search == 'all') {
-            return setFilteredStore(store)
-        } else {
-            setFilteredStore(
-                imgData.filter((item) => item.tags.includes(search))
-            )
+        if (!email || !password) {
+            setError('All input fields are neccessary')
+            setTimeout(() => {
+                setError('')
+            }, 3000)
+            return
         }
 
-        setSearch('')
+        // try {
+        //     const res = await signIn('credentials', {
+        //         email,
+        //         password,
+        //         redirect: false
+        //     })
+
+        //     if (res?.error) {
+        //         setError("Invalid credentials, Please use the username and password provided above")
+        //         setTimeout(() => {
+        //             setError('')
+        //         }, 3000)
+        //         const form = e.target
+        //         form.reset()
+        //         return
+        //     }
+
+        //     router.replace('gallery')
+        //     const form = e.target
+        //     form.reset()
+        // } catch (error) {
+        //     console.log(error);
+        // }
     }
-
-    if (filteredStore.length == 0) {
-        return (
-            <main className="max-w-container-lg mx-auto px-6 py-20">
-                <nav className='flex justify-between'>
-                    <h1 className="font-bold text-black text-4xl ">Image Gallery</h1>
-
-                    <form
-                        onSubmit={(e) => handleSearch(e)}
-                    >
-                        <input
-                            onChange={(e) => setSearch(e.target.value)}
-                            className='border border-red-400 px-5 py-1'
-                            value={search}
-                            type="text"
-                            placeholder='Search tags'
-                        />
-                    </form>
-                </nav>
-
-                <div className=' mt-5'>
-                    <p>No results with that tag were found. Search another e.g. &apos;all&apos;</p>
-                </div>
-            </main>
-        )
-    }
-
 
     return (
-        <main className="max-w-container-lg mx-auto px-6 py-20">
-            <nav className='flex flex-col gap-4 lg:flex-row justify-between'>
-                <h1 className="font-bold text-black text-4xl ">Image Gallery</h1>
-
-                <div className="p-8">
-                    <div className='text-white'>{session?.data?.user?.email}</div>
-                    <button className='text-white' onClick={() => signOut()}>Logout</button>
+        <main className='w-full h-screen flex justify-center items-center'>
+            <form
+                onSubmit={handleSubmit}
+                className='shadow-xl p-8 rounded-lg flex flex-col gap-4 bg-blue-100 min-w-[30%]'>
+                <div className=' text-gray-600'>
+                    <p>Email: user@example.com</p>
+                    <p>Password: 1Password</p>
                 </div>
 
+                <p className='font-bold'>Enter the above details</p>
+                <input
+                    onChange={(e) => setEmail(e.target.value)}
+                    className='px-2 py-2'
+                    type="text"
+                    placeholder='Email' />
+                <input
+                    onChange={(e) => setPassword(e.target.value)}
+                    className='px-2 py-2'
+                    type="password"
+                    placeholder='Password' />
 
-                <form
-                    onSubmit={(e) => handleSearch(e)}
-                >
-                    <input
-                        onChange={(e) => setSearch(e.target.value)}
-                        className='border border-red-400 px-5 py-1'
-                        value={search}
-                        type="text"
-                        placeholder='Search tags'
-                    />
-                </form>
-            </nav>
+                <input
+                    onClick={() => signIn('credentials', { email, password, redirect: true, callbackUrl: '/gallery' })}
+                    disabled={!email || !password}
+                    className='cursor-pointer bg-green-500 p-2' type="submit" value="Sign In" />
 
-            <div className="max-w-container-lg mx-auto py-20">
-
-                <div className='grid grid-cols-2 lg:grid-cols-3 gap-8 md:gap-14'>
-                    <DndContext
-                        sensors={sensors}
-                        collisionDetection={rectIntersection} onDragEnd={onDragEnd}>
-                        <SortableContext items={filteredStore} strategy={rectSortingStrategy}>
-                            {
-                                filteredStore.map((item, i) => (
-                                    <ImgCard key={item.id} user={item} />
-                                ))
-                            }
-                        </SortableContext>
-                    </DndContext>
-                </div>
-            </div>
-        </main >
+                {
+                    error && (
+                        <p className='inline bg-red-500 text-white px-3 py-2'>{error}</p>
+                    )
+                }
+            </form>
+        </main>
     )
 }
 
-Home.requireAuth = true
+export default SignIn
